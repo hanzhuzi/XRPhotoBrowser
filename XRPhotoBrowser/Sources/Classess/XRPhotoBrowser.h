@@ -53,14 +53,23 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, assign) UIStatusBarStyle presentingStatusBarStyle;
 
 /// 转场动画相关 (设置以下两个参数可以实现页面图片转场效果，若页面图片显示内容和内容显示方式相差很大时不建议使用)
+/// 需要转场动画的image
 @property (nonatomic, strong) UIImage * animateImage;
+/// 转场动画imageView的显示模式
+@property (nonatomic, assign) UIViewContentMode fromImageContentMode;
+/// 转场时image开始的rect
 @property (nonatomic, assign) CGRect fromRect;
-
 /// 返回时是否需要动画弹回animateImage，Default is YES.
 @property (nonatomic, assign) BOOL isReboundAnimateImageForBack;
 
 // reload data
 - (void)reloadData;
+
+/// 设置转场动画相关参数，请在showPhotoBrowser前设置，否则无效
+- (void)setTransitionAnimateWithImage:(UIImage *)fromImage
+                          contentMode:(UIViewContentMode)fromContentMode
+                             fromRect:(CGRect)fromRect
+                reboundAnimateForBack:(BOOL)isReboundAnimateForBack;
 
 // 显示图片浏览
 - (void)showPhotoBrowser:(UIViewController *)presentViewController;
@@ -69,7 +78,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)showPhotoBrowser:(UIViewController *)presentViewController displayAtIndex:(NSUInteger)atIndex;
 
 /// 获取需要动画转场的imageView的开始frame
-+ (CGRect)getTransitionAnimateImageViewFromRectWithImageView:(UIImageView *)imageView keyWindow:(UIWindow *)keyWindow;
++ (CGRect)getTransitionAnimateImageViewFromRectWithImageView:(UIImageView *)imageView targetView:(UIView *)targetView;
 
 @end
 

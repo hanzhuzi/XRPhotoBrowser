@@ -405,18 +405,12 @@
         assetModel.indexPath = indexPath; // 记录IndexPath
         
         cell.representedAssetIdentifier = assetModel.phAsset.localIdentifier;
-
-        CGFloat itemWidth = (self.screenWidth - XR_PhotoAsset_Grid_Border * 5.0) / 4.0;
         
         [self.phManager getFitsThumbImageWithAsset:assetModel completeBlock:^(UIImage *image) {
             if ([cell.representedAssetIdentifier isEqualToString:assetModel.phAsset.localIdentifier] && image) {
                 cell.assetImageView.image = image;
             }
         }];
-        
-//        [self.phManager getThumbImageWithAsset:assetModel targetSize:CGSizeMake(itemWidth, itemWidth) completeBlock:^(BOOL isDegrade, UIImage *image) {
-//
-//        }];
         
         // 处理iCloud图片下载
         if (assetModel.isDownloadingFromiCloud && assetModel.downloadProgress.doubleValue < 1.0) {
@@ -543,11 +537,9 @@
         XRPhotoBrowser * photoBrowser = [[XRPhotoBrowser alloc] init];
         photoBrowser.dataArray = photoArray;
         
-        photoBrowser.isHideStatusBarForPhotoBrowser = NO;
-        
-        photoBrowser.fromRect = [XRPhotoBrowser getTransitionAnimateImageViewFromRectWithImageView:cell.assetImageView keyWindow:self.view.window];
-        photoBrowser.animateImage = cell.assetImageView.image;
-        photoBrowser.isReboundAnimateImageForBack = YES;
+        // 设置转场动画相关参数
+        CGRect fromRect = [XRPhotoBrowser getTransitionAnimateImageViewFromRectWithImageView:cell.assetImageView targetView:self.view.window];
+        [photoBrowser setTransitionAnimateWithImage:cell.assetImageView.image contentMode:cell.assetImageView.contentMode fromRect:fromRect reboundAnimateForBack:YES];
         
         [photoBrowser showPhotoBrowser:self displayAtIndex:indexPath.item];
     }

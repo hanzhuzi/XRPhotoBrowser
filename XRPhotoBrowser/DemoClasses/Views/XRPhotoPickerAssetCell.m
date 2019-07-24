@@ -33,6 +33,8 @@
         self.backgroundColor = [UIColor whiteColor];
         
         _assetImageView = [[UIImageView alloc] initWithFrame:self.bounds];
+        _assetImageView.clipsToBounds = YES;
+        _assetImageView.contentMode = UIViewContentModeScaleAspectFill;
         [self addSubview:_assetImageView];
         
         _progressLbl = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, frame.size.width, frame.size.height)];

@@ -173,7 +173,6 @@
     NSString * imgUrl = self.dataArray[indexPath.row];
     
     PhotoListCell * imageCell = [collectionView dequeueReusableCellWithReuseIdentifier:@"PhotoListCell" forIndexPath:indexPath];
-    imageCell.imageView.contentMode = UIViewContentModeScaleToFill;
     [imageCell.imageView sd_setImageWithURL:[NSURL URLWithString:imgUrl] placeholderImage:nil];
     
     return imageCell;
@@ -198,7 +197,8 @@
         photoBrowser.isHideStatusBarForPhotoBrowser = YES;
         // 转场动画设置
         photoBrowser.animateImage = cell.imageView.image;
-        photoBrowser.fromRect = [XRPhotoBrowser getTransitionAnimateImageViewFromRectWithImageView:cell.imageView keyWindow:self.view.window];
+        photoBrowser.fromImageContentMode = cell.imageView.contentMode;
+        photoBrowser.fromRect = [XRPhotoBrowser getTransitionAnimateImageViewFromRectWithImageView:cell.imageView targetView:self.view.window];
         
         [photoBrowser showPhotoBrowser:self displayAtIndex:indexPath.item];
     }

@@ -409,7 +409,9 @@
                 else {
                     if (absX <= 25) { // 向下拖动时水平方向x的距离小于25pt时视为关闭操作
                         // 垂直向下拖
-                        self->_isPanHandled = YES;
+                        if (self.mainScrollView.zoomScale - 0.001 <= self.mainScrollView.minimumZoomScale) {
+                            self->_isPanHandled = YES;
+                        }
                     }
                     else {
                         self->_isPanHandled = NO;
@@ -475,21 +477,16 @@
 // 单击显示，隐藏toolBars
 - (void)imageViewSingleTapAction {
     
-    BOOL isScaling = self.mainScrollView.zoomScale > self.mainScrollView.minimumZoomScale;
-    if (isScaling) {
-        [self setImageToInitalizationScaleAnimated];
-    }
-    else {
-        if (self.singleTapBlock) {
-            self.singleTapBlock(isScaling);
-        }
+    BOOL isScaling = self.mainScrollView.zoomScale - 0.001 > self.mainScrollView.minimumZoomScale;
+    if (self.singleTapBlock) {
+        self.singleTapBlock(isScaling);
     }
 }
 
 // 双击，放大\还原
 - (void)imageViewDoubleTapAction:(UITouch *)touch {
     
-    if (self.mainScrollView.zoomScale > self.mainScrollView.minimumZoomScale) {
+    if (self.mainScrollView.zoomScale - 0.001 > self.mainScrollView.minimumZoomScale) {
         [self setImageToInitalizationScaleAnimated];
     }
     else {

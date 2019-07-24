@@ -1,19 +1,19 @@
 Pod::Spec.new do |spec|
   
   spec.name         = "XRPhotoBrowser"
-  spec.version      = "1.0.1"
+  spec.version      = "1.0.2"
   spec.summary      = "Powerful, low memory usage, efficient and smooth photo browsing framework that supports image transit effect."
   spec.platform     = :ios, "9.0"
   spec.description  = <<-DESC
-                   Powerful, low memory usage, efficient and smooth photo browsing framework that supports image transit effect.
+                   XRPhotoBrowser is A Powerful, low memory usage, efficient and smooth photo browsing framework that supports image transit effect.
                    DESC
                    
   spec.homepage     = "https://github.com/hanzhuzi/XRPhotoBrowser"
-  spec.license      = { :type => "MIT", :file => "FILE_LICENSE" }
+  spec.license      = { :type => "MIT", :file => "LICENSE" }
   spec.author       = { "hanzhuzi" => "violet_buddhist@163.com" }
   spec.source       = { :git => "https://github.com/hanzhuzi/XRPhotoBrowser.git", :tag => "#{spec.version}" }
 
-  spec.source_files  = "Source/Classes", "XRPhotoBrowser/Sources/**/*.{h,m}"
+  spec.source_files  = "XRPhotoBrowser/Sources/**/*.{h,m}"
   
   spec.resource_bundles = {
       'XRPhotoBrowser' => ['XRPhotoBrowser/Sources/XRPhotoBrowser.bundle/*.png']

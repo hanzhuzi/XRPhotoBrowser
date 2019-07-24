@@ -67,6 +67,7 @@ static CGFloat kImageViewAnimateTimeInterval = 0.4;
         self.isHideStatusBarForPhotoBrowser = YES;
         self->_isStatusBarHidden = NO;
         self.isReboundAnimateImageForBack = YES;
+        self.fromImageContentMode = UIViewContentModeScaleAspectFill;
         self.presentingStatusBarStyle = UIStatusBarStyleLightContent;
         self->_curStatusBarStyle = self.presentingStatusBarStyle;
         self->currentIndexPath = [NSIndexPath indexPathForItem:-99 inSection:0];
@@ -146,7 +147,10 @@ static CGFloat kImageViewAnimateTimeInterval = 0.4;
     if (!CGSizeEqualToSize(self.fromRect.size, CGSizeZero) && self.animateImage) {
         self.animateImageView = [[UIImageView alloc] init];
         self.animateImageView.frame = self.fromRect;
+        self.animateImageView.contentMode = self.fromImageContentMode;
+        self.animateImageView.clipsToBounds = YES;
         self.animateImageView.image = self.animateImage;
+        self.animateImageView.hidden = YES;
         [self.view addSubview:self.animateImageView];
         
         self.animateImageView.userInteractionEnabled = NO;
@@ -302,7 +306,7 @@ static CGFloat kImageViewAnimateTimeInterval = 0.4;
             
             [UIView animateWithDuration:kImageViewAnimateTimeInterval animations:^{
                 weakSelf.animateImageView.frame = weakSelf.fromRect;
-                weakSelf.animateImageView.contentMode = UIViewContentModeScaleToFill;
+                weakSelf.animateImageView.contentMode = weakSelf.fromImageContentMode;
                 weakSelf.view.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0];
                 weakSelf.mainCollectionView.alpha = 0;
                 weakSelf.navBar.alpha = 0;
@@ -339,9 +343,20 @@ static CGFloat kImageViewAnimateTimeInterval = 0.4;
     }
 }
 
-+ (CGRect)getTransitionAnimateImageViewFromRectWithImageView:(UIImageView *)imageView keyWindow:(UIWindow *)keyWindow {
+- (void)setTransitionAnimateWithImage:(UIImage *)fromImage
+                          contentMode:(UIViewContentMode)fromContentMode
+                             fromRect:(CGRect)fromRect
+                reboundAnimateForBack:(BOOL)isReboundAnimateForBack {
     
-    CGRect fromRect = [imageView.superview convertRect:imageView.frame toView:keyWindow];
+    self.animateImage = fromImage;
+    self.fromImageContentMode = fromContentMode;
+    self.fromRect = fromRect;
+    self.isReboundAnimateImageForBack = isReboundAnimateForBack;
+}
+
++ (CGRect)getTransitionAnimateImageViewFromRectWithImageView:(UIImageView *)imageView targetView:(UIView *)targetView {
+    
+    CGRect fromRect = [imageView.superview convertRect:imageView.frame toView:targetView];
     return fromRect;
 }
 
@@ -457,8 +472,6 @@ static CGFloat kImageViewAnimateTimeInterval = 0.4;
         }
     };
     
-    __weak __block XRBrowserImageCell * weakImgCell = imageCell;
-    
     imageCell.imageViewDidFinishLayoutFrameBlock = ^(UIImageView * imageView, CGRect imageViewFrame){
         
         __strong typeof(weakSelf) strongSelf = weakSelf;
@@ -466,15 +479,16 @@ static CGFloat kImageViewAnimateTimeInterval = 0.4;
         if (!CGRectEqualToRect(imageView.frame, CGRectZero) && strongSelf->isApplyAnimateForImage == NO) {
             strongSelf->isApplyAnimateForImage = YES;
             imageView.hidden = YES;
+            strongSelf.animateImageView.hidden = NO;
             
-            CGRect toFrame = [weakImgCell.contentView convertRect:imageView.frame toView:weakSelf.view];
+            CGRect toFrame = [XRPhotoBrowser getTransitionAnimateImageViewFromRectWithImageView:imageView targetView:weakSelf.view];
             weakSelf.toRect = toFrame;
             
             [UIView animateWithDuration:kImageViewAnimateTimeInterval animations:^{
                 weakSelf.animateImageView.frame = weakSelf.toRect;
+                weakSelf.animateImageView.contentMode = UIViewContentModeScaleAspectFit;
             } completion:^(BOOL finished) {
                 weakSelf.animateImageView.frame = weakSelf.toRect;
-                weakSelf.animateImageView.contentMode = UIViewContentModeScaleAspectFit;
                 if (finished) {
                     imageView.hidden = NO;
                     weakSelf.animateImageView.hidden = YES;
