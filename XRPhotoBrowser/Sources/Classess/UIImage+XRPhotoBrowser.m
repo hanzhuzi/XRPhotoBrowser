@@ -1,5 +1,7 @@
 //
-//  Copyright (c) 2017-2020 是心作佛
+//  Copyright (c) 2019-2024 Ran Xu
+//
+//  XRPhotoBrowser is A Powerful, low memory usage, efficient and smooth photo browsing framework that supports image transit effect.
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -19,11 +21,11 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#import "UIImage+XRPhotosCategorys.h"
+#import "UIImage+XRPhotoBrowser.h"
 
 @implementation UIImage (XRPhotosCategorys)
 
-+ (UIImage *)imageForResourceName:(NSString *)imageName selfClass:(Class)selfClass {
++ (UIImage *)xrBrowser_imageForResourceName:(NSString *)imageName selfClass:(Class)selfClass {
     
     NSBundle * frameBundle = [NSBundle bundleForClass:selfClass];
     NSURL * bundleUrl = [[frameBundle resourceURL] URLByAppendingPathComponent:@"XRPhotoBrowser.bundle"];
@@ -33,7 +35,7 @@
     return resImage;
 }
 
-+ (UIImage *)backgroundImageWithColor:(UIColor *)backgroundColor size:(CGSize)size {
++ (UIImage *)xrBrowser_backgroundImageWithColor:(UIColor *)backgroundColor size:(CGSize)size {
     
     UIGraphicsBeginImageContext(size);
     
@@ -46,7 +48,7 @@
     return colorImg;
 }
 
-- (UIImage *)fixOrientation
+- (UIImage *)xrBrowser_fixOrientation
 {
     // No-op if the orientation is already correct.
     if (self.imageOrientation == UIImageOrientationUp) {

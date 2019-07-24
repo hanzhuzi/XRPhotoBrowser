@@ -134,6 +134,7 @@
     [super viewWillAppear:animated];
     
     [self.navigationController setNavigationBarHidden:NO animated:animated];
+    self.navigationController.navigationBar.barStyle = UIBarStyleDefault;
     [self setNeedsStatusBarAppearanceUpdate];
 }
 
@@ -147,10 +148,6 @@
 
 - (BOOL)prefersStatusBarHidden {
     return NO;
-}
-
-- (UIStatusBarStyle)preferredStatusBarStyle {
-    return UIStatusBarStyleLightContent;
 }
 
 - (UIStatusBarAnimation)preferredStatusBarUpdateAnimation {
@@ -189,9 +186,6 @@
         
         PhotoListCell * cell = (PhotoListCell *)[collectionView cellForItemAtIndexPath:indexPath];
         
-        CGRect convertRect = [cell.contentView convertRect:cell.imageView.frame toView:self.view.window];
-        NSLog(@"frameRect->%@", NSStringFromCGRect(convertRect));
-        
         NSMutableArray * photoArray = [[NSMutableArray alloc] init];
         
         for (NSString * urlStr in self.dataArray) {
@@ -204,7 +198,7 @@
         photoBrowser.isHideStatusBarForPhotoBrowser = YES;
         // 转场动画设置
         photoBrowser.animateImage = cell.imageView.image;
-        photoBrowser.fromRect = convertRect;
+        photoBrowser.fromRect = [XRPhotoBrowser getTransitionAnimateImageViewFromRectWithImageView:cell.imageView keyWindow:self.view.window];
         
         [photoBrowser showPhotoBrowser:self displayAtIndex:indexPath.item];
     }

@@ -23,7 +23,7 @@
 #import <Photos/Photos.h>
 #import "XRPhotoAlbumModel.h"
 #import "XRPhotoAssetModel.h"
-#import "UIImage+XRPhotosCategorys.h"
+#import "UIImage+XRPhotoBrowser.h"
 #import "XRPhotoBrowserMarcos.h"
 
 #define iOS9_Later ([[[UIDevice currentDevice] systemVersion] floatValue] >= 9.0)
@@ -131,7 +131,7 @@
                     
                     [self.cacheImageManager requestImageForAsset:pAsset.phAsset targetSize:CGSizeMake(targetSize.width * scale, targetSize.height * scale) contentMode:PHImageContentModeAspectFill options:reqOptions resultHandler:^(UIImage * _Nullable result, NSDictionary * _Nullable info) {
                         if (result) {
-                            result = [result fixOrientation];
+                            result = [result xrBrowser_fixOrientation];
                             if ([albumModel.requestIdentifier isEqualToString:pAsset.phAsset.localIdentifier]) {
                                 dispatch_async(dispatch_get_main_queue(), ^{
                                     albumModel.albumThubImage = result;
@@ -226,7 +226,7 @@
         
         reqOptions.progressHandler = ^(double progress, NSError * _Nullable error, BOOL * _Nonnull stop, NSDictionary * _Nullable info) {
             
-            XRLog(@"iCloud图片下载进度：%.2f", progress);
+            XRBrowserLog(@"iCloud图片下载进度：%.2f", progress);
             
             NSMutableDictionary * dict = [NSMutableDictionary dictionaryWithCapacity:5];
             NSNumber * progressNum = [NSNumber numberWithDouble:progress];
@@ -236,14 +236,14 @@
             phModel.isDownloadingFromiCloud = YES;
             phModel.downloadProgress = progressNum;
             
-            [NSNotificationCenter.defaultCenter postNotificationName:NNKEY_XR_PHMANAGER_DOWNLOAD_IMAGE_FROM_ICLOUD object:dict];
+            [NSNotificationCenter.defaultCenter postNotificationName:NNKEY_XRPHOTOBROWSER_PHMANAGER_DOWNLOAD_IMAGE_FROM_ICLOUD object:dict];
         };
         
         PHAsset * pAsset = phModel.phAsset;
         
         [self.cacheImageManager requestImageForAsset:pAsset targetSize:CGSizeMake(targetSize.width * scale, targetSize.height * scale) contentMode:PHImageContentModeAspectFill options:reqOptions resultHandler:^(UIImage * _Nullable result, NSDictionary * _Nullable info) {
             if (result) {
-                result = [result fixOrientation];
+                result = [result xrBrowser_fixOrientation];
                 
                 if ([phModel.requestIdentifier isEqualToString:pAsset.localIdentifier]) {
                     dispatch_async(dispatch_get_main_queue(), ^{
@@ -277,7 +277,7 @@
         
         reqOptions.progressHandler = ^(double progress, NSError * _Nullable error, BOOL * _Nonnull stop, NSDictionary * _Nullable info) {
             
-            XRLog(@"iCloud图片下载进度：%.2f", progress);
+            XRBrowserLog(@"iCloud图片下载进度：%.2f", progress);
             
             NSMutableDictionary * dict = [NSMutableDictionary dictionaryWithCapacity:5];
             NSNumber * progressNum = [NSNumber numberWithDouble:progress];
@@ -287,7 +287,7 @@
             phModel.isDownloadingFromiCloud = YES;
             phModel.downloadProgress = progressNum;
             
-            [NSNotificationCenter.defaultCenter postNotificationName:NNKEY_XR_PHMANAGER_DOWNLOAD_IMAGE_FROM_ICLOUD object:dict];
+            [NSNotificationCenter.defaultCenter postNotificationName:NNKEY_XRPHOTOBROWSER_PHMANAGER_DOWNLOAD_IMAGE_FROM_ICLOUD object:dict];
         };
         
         PHAsset * pAsset = phModel.phAsset;
@@ -295,16 +295,16 @@
         [self.cacheImageManager requestImageForAsset:pAsset targetSize:PHImageManagerMaximumSize contentMode:PHImageContentModeAspectFit options:reqOptions resultHandler:^(UIImage * _Nullable result, NSDictionary * _Nullable info) {
             if (result && info) {
                 if (![info[PHImageResultIsDegradedKey] boolValue] && ![info[PHImageCancelledKey] boolValue] && ![info[PHImageErrorKey] boolValue]) {
-                    result = [result fixOrientation];
+                    result = [result xrBrowser_fixOrientation];
                     
                     if (pAsset.mediaType == PHAssetMediaTypeImage) {
                         NSURL * fileURL = (NSURL *)info[@"PHImageFileURLKey"];
-                        XRLog(@"image fileURL--> %@", fileURL);
+                        XRBrowserLog(@"image fileURL--> %@", fileURL);
                     }
                     else if (pAsset.mediaType == PHAssetMediaTypeVideo) {
                         if ([pAsset isKindOfClass:[AVURLAsset class]]) {
                             NSURL * fileURL = ((AVURLAsset *)pAsset).URL;
-                            XRLog(@"video fileURL--> %@", fileURL);
+                            XRBrowserLog(@"video fileURL--> %@", fileURL);
                         }
                     }
                     
@@ -339,7 +339,7 @@
         reqOptions.networkAccessAllowed = YES;
         reqOptions.progressHandler = ^(double progress, NSError * _Nullable error, BOOL * _Nonnull stop, NSDictionary * _Nullable info) {
             
-            XRLog(@"iCloud图片下载进度：%.2f", progress);
+            XRBrowserLog(@"iCloud图片下载进度：%.2f", progress);
             
             NSMutableDictionary * dict = [NSMutableDictionary dictionaryWithCapacity:5];
             NSNumber * progressNum = [NSNumber numberWithDouble:progress];
@@ -349,7 +349,7 @@
             phModel.isDownloadingFromiCloud = YES;
             phModel.downloadProgress = progressNum;
             
-            [NSNotificationCenter.defaultCenter postNotificationName:NNKEY_XR_PHMANAGER_DOWNLOAD_IMAGE_FROM_ICLOUD object:dict];
+            [NSNotificationCenter.defaultCenter postNotificationName:NNKEY_XRPHOTOBROWSER_PHMANAGER_DOWNLOAD_IMAGE_FROM_ICLOUD object:dict];
         };
         
         PHAsset * pAsset = phModel.phAsset;
@@ -361,16 +361,16 @@
         [self.cacheImageManager requestImageForAsset:pAsset targetSize:thumbTargetSize contentMode:PHImageContentModeAspectFit options:reqOptions resultHandler:^(UIImage * _Nullable result, NSDictionary * _Nullable info) {
             if (result && info) {
                 if (![info[PHImageCancelledKey] boolValue] && ![info[PHImageErrorKey] boolValue]) {
-                    result = [result fixOrientation];
+                    result = [result xrBrowser_fixOrientation];
                     
                     if (pAsset.mediaType == PHAssetMediaTypeImage) {
                         NSURL * fileURL = (NSURL *)info[@"PHImageFileURLKey"];
-                        XRLog(@"image fileURL--> %@", fileURL);
+                        XRBrowserLog(@"image fileURL--> %@", fileURL);
                     }
                     else if (pAsset.mediaType == PHAssetMediaTypeVideo) {
                         if ([pAsset isKindOfClass:[AVURLAsset class]]) {
                             NSURL * fileURL = ((AVURLAsset *)pAsset).URL;
-                            XRLog(@"video fileURL--> %@", fileURL);
+                            XRBrowserLog(@"video fileURL--> %@", fileURL);
                         }
                     }
                     
@@ -405,7 +405,7 @@
         reqOptions.networkAccessAllowed = YES;
         reqOptions.progressHandler = ^(double progress, NSError * _Nullable error, BOOL * _Nonnull stop, NSDictionary * _Nullable info) {
             
-            XRLog(@"iCloud图片下载进度：%.2f", progress);
+            XRBrowserLog(@"iCloud图片下载进度：%.2f", progress);
             
             NSMutableDictionary * dict = [NSMutableDictionary dictionaryWithCapacity:5];
             NSNumber * progressNum = [NSNumber numberWithDouble:progress];
@@ -415,7 +415,7 @@
             phModel.isDownloadingFromiCloud = YES;
             phModel.downloadProgress = progressNum;
             
-            [NSNotificationCenter.defaultCenter postNotificationName:NNKEY_XR_PHMANAGER_DOWNLOAD_IMAGE_FROM_ICLOUD object:dict];
+            [NSNotificationCenter.defaultCenter postNotificationName:NNKEY_XRPHOTOBROWSER_PHMANAGER_DOWNLOAD_IMAGE_FROM_ICLOUD object:dict];
         };
         
         PHAsset * pAsset = phModel.phAsset;
@@ -427,16 +427,16 @@
         [self.cacheImageManager requestImageForAsset:pAsset targetSize:imageTargetSize contentMode:PHImageContentModeAspectFit options:reqOptions resultHandler:^(UIImage * _Nullable result, NSDictionary * _Nullable info) {
             if (result && info) {
                 if (![info[PHImageCancelledKey] boolValue] && ![info[PHImageErrorKey] boolValue]) {
-                    result = [result fixOrientation];
+                    result = [result xrBrowser_fixOrientation];
                     
                     if (pAsset.mediaType == PHAssetMediaTypeImage) {
                         NSURL * fileURL = (NSURL *)info[@"PHImageFileURLKey"];
-                        XRLog(@"image fileURL--> %@", fileURL);
+                        XRBrowserLog(@"image fileURL--> %@", fileURL);
                     }
                     else if (pAsset.mediaType == PHAssetMediaTypeVideo) {
                         if ([pAsset isKindOfClass:[AVURLAsset class]]) {
                             NSURL * fileURL = ((AVURLAsset *)pAsset).URL;
-                            XRLog(@"video fileURL--> %@", fileURL);
+                            XRBrowserLog(@"video fileURL--> %@", fileURL);
                         }
                     }
                     if ([phModel.requestIdentifier isEqualToString:pAsset.localIdentifier]) {

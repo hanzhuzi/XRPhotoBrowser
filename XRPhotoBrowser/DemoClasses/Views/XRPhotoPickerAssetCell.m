@@ -21,7 +21,7 @@
 
 #import "XRPhotoPickerAssetCell.h"
 #import "XRPhotoBrowserMarcos.h"
-#import "UIImage+XRPhotosCategorys.h"
+#import "UIImage+XRPhotoBrowser.h"
 
 #define XR_PhotoAsset_Grid_Border ([UIScreen mainScreen].bounds.size.width < 375.0 ? 2.0 : 5.0)
 

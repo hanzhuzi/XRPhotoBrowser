@@ -16,7 +16,7 @@
 		014FCBA422E1C0CA00D4A067 /* XRPhotoAlbumModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 014FCB9E22E1C0CA00D4A067 /* XRPhotoAlbumModel.m */; };
 		014FCBA522E1C0CA00D4A067 /* XRPhotoAssetModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 014FCBA022E1C0CA00D4A067 /* XRPhotoAssetModel.m */; };
 		014FCBA622E1C0CA00D4A067 /* XRPhotoBrowserModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 014FCBA122E1C0CA00D4A067 /* XRPhotoBrowserModel.m */; };
-		014FCBA922E1C12600D4A067 /* UIImage+XRPhotosCategorys.m in Sources */ = {isa = PBXBuildFile; fileRef = 014FCBA722E1C12600D4A067 /* UIImage+XRPhotosCategorys.m */; };
+		014FCBA922E1C12600D4A067 /* UIImage+XRPhotoBrowser.m in Sources */ = {isa = PBXBuildFile; fileRef = 014FCBA722E1C12600D4A067 /* UIImage+XRPhotoBrowser.m */; };
 		014FCBAC22E1C2F600D4A067 /* XRPhotoPickerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 014FCBAB22E1C2F500D4A067 /* XRPhotoPickerViewController.m */; };
 		014FCBAF22E1C5FF00D4A067 /* XRPhotoPickerAssetCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 014FCBAD22E1C5FF00D4A067 /* XRPhotoPickerAssetCell.m */; };
 		016B60C622E0034000D25B4D /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 016B60C522E0034000D25B4D /* UIKit.framework */; };
@@ -78,8 +78,8 @@
 		014FCBA122E1C0CA00D4A067 /* XRPhotoBrowserModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XRPhotoBrowserModel.m; sourceTree = "<group>"; };
 		014FCBA222E1C0CA00D4A067 /* XRPhotoBrowserModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XRPhotoBrowserModel.h; sourceTree = "<group>"; };
 		014FCBA322E1C0CA00D4A067 /* XRPhotoAlbumModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XRPhotoAlbumModel.h; sourceTree = "<group>"; };
-		014FCBA722E1C12600D4A067 /* UIImage+XRPhotosCategorys.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+XRPhotosCategorys.m"; sourceTree = "<group>"; };
-		014FCBA822E1C12600D4A067 /* UIImage+XRPhotosCategorys.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+XRPhotosCategorys.h"; sourceTree = "<group>"; };
+		014FCBA722E1C12600D4A067 /* UIImage+XRPhotoBrowser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+XRPhotoBrowser.m"; sourceTree = "<group>"; };
+		014FCBA822E1C12600D4A067 /* UIImage+XRPhotoBrowser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+XRPhotoBrowser.h"; sourceTree = "<group>"; };
 		014FCBAA22E1C2F500D4A067 /* XRPhotoPickerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XRPhotoPickerViewController.h; sourceTree = "<group>"; };
 		014FCBAB22E1C2F500D4A067 /* XRPhotoPickerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XRPhotoPickerViewController.m; sourceTree = "<group>"; };
 		014FCBAD22E1C5FF00D4A067 /* XRPhotoPickerAssetCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XRPhotoPickerAssetCell.m; sourceTree = "<group>"; };
@@ -265,8 +265,8 @@
 		016E44F122DC1C9500A829BC /* Classess */ = {
 			isa = PBXGroup;
 			children = (
-				014FCBA822E1C12600D4A067 /* UIImage+XRPhotosCategorys.h */,
-				014FCBA722E1C12600D4A067 /* UIImage+XRPhotosCategorys.m */,
+				014FCBA822E1C12600D4A067 /* UIImage+XRPhotoBrowser.h */,
+				014FCBA722E1C12600D4A067 /* UIImage+XRPhotoBrowser.m */,
 				014FCB9D22E1C07500D4A067 /* Model */,
 				012EDA2322DEB55800557E59 /* Marcos */,
 				016E44FF22DC6AD100A829BC /* Layouts */,
@@ -590,7 +590,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				014FCBA922E1C12600D4A067 /* UIImage+XRPhotosCategorys.m in Sources */,
+				014FCBA922E1C12600D4A067 /* UIImage+XRPhotoBrowser.m in Sources */,
 				014FCBA522E1C0CA00D4A067 /* XRPhotoAssetModel.m in Sources */,
 				014FCB9C22E1BFAB00D4A067 /* XRPhtoManager.m in Sources */,
 				016E44C322DC1C7D00A829BC /* ViewController.m in Sources */,

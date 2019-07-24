@@ -28,7 +28,7 @@
 #import "XRPhotoAssetModel.h"
 #import "XRPhotoAlbumModel.h"
 #import "XRPhotoBrowserMarcos.h"
-#import "UIImage+XRPhotosCategorys.h"
+#import "UIImage+XRPhotoBrowser.h"
 #import "XRPhotoPickerAssetCell.h"
 
 #import "XRPhotoBrowser.h"
@@ -63,7 +63,7 @@
 #pragma mark - deinit
 - (void)dealloc {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
-    XRLog(@"'%@' is dealloc!", NSStringFromClass([self class]));
+    XRBrowserLog(@"'%@' is dealloc!", NSStringFromClass([self class]));
 }
 
 #pragma mark - Initilizations
@@ -273,7 +273,7 @@
 // 注册通知
 - (void)addNotifications {
     
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(receiveiCloudDownloadNotification:) name:NNKEY_XR_PHMANAGER_DOWNLOAD_IMAGE_FROM_ICLOUD object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(receiveiCloudDownloadNotification:) name:NNKEY_XRPHOTOBROWSER_PHMANAGER_DOWNLOAD_IMAGE_FROM_ICLOUD object:nil];
 }
 
 #pragma mark - Actions
@@ -532,7 +532,6 @@
     if (indexPath.item < self.assetArray.count) {
         
         XRPhotoPickerAssetCell * cell = (XRPhotoPickerAssetCell *)[collectionView cellForItemAtIndexPath:indexPath];
-        CGRect fromRect = [cell.assetImageView.superview convertRect:cell.assetImageView.frame toView:self.view.window];
         
         NSMutableArray * photoArray = [NSMutableArray arrayWithCapacity:10];
         
@@ -543,7 +542,10 @@
         
         XRPhotoBrowser * photoBrowser = [[XRPhotoBrowser alloc] init];
         photoBrowser.dataArray = photoArray;
-        photoBrowser.fromRect = fromRect;
+        
+        photoBrowser.isHideStatusBarForPhotoBrowser = NO;
+        
+        photoBrowser.fromRect = [XRPhotoBrowser getTransitionAnimateImageViewFromRectWithImageView:cell.assetImageView keyWindow:self.view.window];
         photoBrowser.animateImage = cell.assetImageView.image;
         photoBrowser.isReboundAnimateImageForBack = YES;
         
@@ -577,7 +579,7 @@
     __weak __typeof(self) weakSelf = self;
     if ([info[UIImagePickerControllerMediaType] isEqualToString:(NSString *)kUTTypeImage] && [info objectForKey:UIImagePickerControllerOriginalImage]) {
         UIImage * originalImage = [info objectForKey:UIImagePickerControllerOriginalImage];
-        originalImage = [originalImage fixOrientation];
+        originalImage = [originalImage xrBrowser_fixOrientation];
         
         [[NSOperationQueue mainQueue] addOperationWithBlock:^{
             if (weakSelf.isAllowCrop) {
@@ -598,7 +600,7 @@
             
         } completionHandler:^(BOOL success, NSError * _Nullable error) {
             if (!success) {
-                XRLog(@"cratation asset error!");
+                XRBrowserLog(@"cratation asset error!");
             }
             else {
                 PHFetchResult * ftResult = [PHAsset fetchAssetsWithLocalIdentifiers:@[weakSelf.saveLocalIdentifier] options:nil];

@@ -1,10 +1,25 @@
 //
-//  XRPhotoBrowser.m
-//  XRPhotoBrowser
+//  Copyright (c) 2019-2024 Ran Xu
 //
-//  Created by 徐冉 on 2019/7/15.
-//  Copyright © 2019 QK. All rights reserved.
+//  XRPhotoBrowser is A Powerful, low memory usage, efficient and smooth photo browsing framework that supports image transit effect.
 //
+//  Permission is hereby granted, free of charge, to any person obtaining a copy
+//  of this software and associated documentation files (the "Software"), to deal
+//  in the Software without restriction, including without limitation the rights
+//  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+//  copies of the Software, and to permit persons to whom the Software is
+//  furnished to do so, subject to the following conditions:
+//
+//  The above copyright notice and this permission notice shall be included in all
+//  copies or substantial portions of the Software.
+//
+//  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+//  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+//  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+//  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+//  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+//  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+//  SOFTWARE.
 
 #import "XRPhotoBrowser.h"
 #import "XRPhotoBrowserModel.h"
@@ -15,7 +30,7 @@
 #import "XRPhotoBrowserNavigationBar.h"
 
 static CGFloat kAnimateTimeInterval = 0.3;
-static CGFloat kImageViewAnimateTimeInterval = 0.42;
+static CGFloat kImageViewAnimateTimeInterval = 0.4;
 
 @interface XRPhotoBrowser ()<UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout>
 {
@@ -41,7 +56,7 @@ static CGFloat kImageViewAnimateTimeInterval = 0.42;
 - (void)dealloc {
     
     [[NSNotificationCenter defaultCenter] removeObserver:self];
-    XRLog(@"%@ is dealloc!", NSStringFromClass(self.class));
+    XRBrowserLog(@"%@ is dealloc!", NSStringFromClass(self.class));
 }
 
 - (instancetype)init {
@@ -49,9 +64,11 @@ static CGFloat kImageViewAnimateTimeInterval = 0.42;
     if (self) {
         
         self.displayAtIndex = 0;
+        self.isHideStatusBarForPhotoBrowser = YES;
         self->_isStatusBarHidden = NO;
         self.isReboundAnimateImageForBack = YES;
-        self->_curStatusBarStyle = UIStatusBarStyleLightContent;
+        self.presentingStatusBarStyle = UIStatusBarStyleLightContent;
+        self->_curStatusBarStyle = self.presentingStatusBarStyle;
         self->currentIndexPath = [NSIndexPath indexPathForItem:-99 inSection:0];
         
         return self;
@@ -160,6 +177,15 @@ static CGFloat kImageViewAnimateTimeInterval = 0.42;
     
     [self.navigationController setNavigationBarHidden:YES animated:animated];
     self.navigationController.navigationBar.barStyle = UIBarStyleBlack;
+    
+    if (self.isHideStatusBarForPhotoBrowser) {
+        if (self.presentingStatusBarStyle != UIStatusBarStyleLightContent) {
+            self->_curStatusBarStyle = self.presentingStatusBarStyle;
+        }
+        else {
+            self->_curStatusBarStyle = self.presentingViewController.preferredStatusBarStyle;
+        }
+    }
     [self setNeedsStatusBarAppearanceUpdate];
     
     [self reloadData];
@@ -226,6 +252,15 @@ static CGFloat kImageViewAnimateTimeInterval = 0.42;
     
     __weak __typeof(self) weakSelf = self;
     
+    if (self.isHideStatusBarForPhotoBrowser) {
+        if (self.presentingStatusBarStyle != UIStatusBarStyleLightContent) {
+            self->_curStatusBarStyle = self.presentingStatusBarStyle;
+        }
+        else {
+            self->_curStatusBarStyle = self.presentingViewController.preferredStatusBarStyle;
+        }
+    }
+    
     [UIView animateWithDuration:kAnimateTimeInterval animations:^{
         weakSelf.view.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:1.0];
         weakSelf.mainCollectionView.alpha = 1.0;
@@ -245,7 +280,13 @@ static CGFloat kImageViewAnimateTimeInterval = 0.42;
     
     // 关闭时还原成跟上个页面的状态栏样式一致以解决关闭时上个页面导航栏闪动问题
     self->_isStatusBarHidden = NO;
-    self->_curStatusBarStyle = UIStatusBarStyleDefault;
+    if (self.presentingStatusBarStyle != UIStatusBarStyleLightContent) {
+        self->_curStatusBarStyle = self.presentingStatusBarStyle;
+    }
+    else {
+        self->_curStatusBarStyle = self.presentingViewController.preferredStatusBarStyle;
+    }
+    
     [self setNeedsStatusBarAppearanceUpdate];
     
     if (self.isReboundAnimateImageForBack && self.animateImage && self->currentIndexPath.item == self.displayAtIndex) {
@@ -296,6 +337,12 @@ static CGFloat kImageViewAnimateTimeInterval = 0.42;
             [weakSelf dismissViewControllerAnimated:NO completion:nil];
         }];
     }
+}
+
++ (CGRect)getTransitionAnimateImageViewFromRectWithImageView:(UIImageView *)imageView keyWindow:(UIWindow *)keyWindow {
+    
+    CGRect fromRect = [imageView.superview convertRect:imageView.frame toView:keyWindow];
+    return fromRect;
 }
 
 - (void)reloadData {
@@ -399,12 +446,7 @@ static CGFloat kImageViewAnimateTimeInterval = 0.42;
     
     __weak __typeof(self) weakSelf = self;
     imageCell.singleTapBlock = ^(BOOL isScaling){
-        if (isScaling) {
-            __strong __typeof(weakSelf) strongSelf = weakSelf;
-            strongSelf->_isStatusBarHidden = !strongSelf->_isStatusBarHidden;
-            [weakSelf showOrHiddenStatusBar:strongSelf->_isStatusBarHidden];
-        }
-        else {
+        if (!isScaling) {
             [weakSelf hide];
         }
     };

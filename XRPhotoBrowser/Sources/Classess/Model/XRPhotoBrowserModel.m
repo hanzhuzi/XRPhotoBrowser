@@ -1,14 +1,29 @@
 //
-//  XRPhotoBrowserModel.m
-//  XRPhotoBrowser
+//  Copyright (c) 2019-2024 Ran Xu
 //
-//  Created by 徐冉 on 2019/7/15.
-//  Copyright © 2019 QK. All rights reserved.
+//  XRPhotoBrowser is A Powerful, low memory usage, efficient and smooth photo browsing framework that supports image transit effect.
 //
+//  Permission is hereby granted, free of charge, to any person obtaining a copy
+//  of this software and associated documentation files (the "Software"), to deal
+//  in the Software without restriction, including without limitation the rights
+//  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+//  copies of the Software, and to permit persons to whom the Software is
+//  furnished to do so, subject to the following conditions:
+//
+//  The above copyright notice and this permission notice shall be included in all
+//  copies or substantial portions of the Software.
+//
+//  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+//  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+//  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+//  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+//  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+//  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+//  SOFTWARE.
 
 #import "XRPhotoBrowserModel.h"
 #import "XRPhotoBrowserMarcos.h"
-#import "UIImage+XRPhotosCategorys.h"
+#import "UIImage+XRPhotoBrowser.h"
 
 #import <SDWebImage/SDWebImageManager.h>
 #import <Photos/Photos.h>
@@ -188,7 +203,7 @@
                 [[NSNotificationCenter defaultCenter] postNotificationName:XRPHOTOBROWSER_IMAGE_LOAD_PROGRESS_CHANGED_NNKEY object:weakSelf userInfo:nil];
             });
             
-            XRLog(@"url->%@\nprogress-> %lf", targetURL.absoluteString, progress);
+            XRBrowserLog(@"url->%@\nprogress-> %lf", targetURL.absoluteString, progress);
         }
         
     } completed:^(UIImage * _Nullable image, NSData * _Nullable data, NSError * _Nullable error, SDImageCacheType cacheType, BOOL finished, NSURL * _Nullable imageURL) {
@@ -231,7 +246,7 @@
                 [weakSelf imageLoadingFailture];
             }
         } @catch (NSException *exception) {
-            XRLog(@"local url to load image error->%@", exception);
+            XRBrowserLog(@"local url to load image error->%@", exception);
             [weakSelf imageLoadingFailture];
         } @finally {
             // no things
@@ -263,7 +278,7 @@
                 [weakSelf imageLoadingFailture];
             }
         } @catch (NSException *exception) {
-            XRLog(@"data convert to image error->%@", exception);
+            XRBrowserLog(@"data convert to image error->%@", exception);
             [weakSelf imageLoadingFailture];
         } @finally {
             // no things
@@ -321,7 +336,7 @@
                     if (![info[PHImageCancelledKey] boolValue] && ![info[PHImageErrorKey] boolValue]) {
                         
                         if (result) {
-                            UIImage * resImage = [result fixOrientation];
+                            UIImage * resImage = [result xrBrowser_fixOrientation];
                             weakSelf.finalImage = resImage;
                             weakSelf.progressInLoading = 1.0;
                             [weakSelf imageLoadingComplete];
@@ -337,7 +352,7 @@
             }
             else {
                 // 一般不会到这里，异步请求若走到这里也无法判断是哪一个请求出错了。
-                XRLog(@"requestImageForAsset is error!");
+                XRBrowserLog(@"requestImageForAsset is error!");
             }
         }];
     }];
