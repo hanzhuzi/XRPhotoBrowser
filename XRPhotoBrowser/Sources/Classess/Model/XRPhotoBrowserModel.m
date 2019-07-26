@@ -26,6 +26,7 @@
 #import "UIImage+XRPhotoBrowser.h"
 
 #import <SDWebImage/SDWebImageManager.h>
+#import <SDWebImage/SDWebImageDownloaderOperation.h>
 #import <Photos/Photos.h>
 
 #define XR_SDWebImageDownloadImageOptions (SDWebImageLowPriority | SDWebImageRetryFailed | SDWebImageAllowInvalidSSLCertificates)

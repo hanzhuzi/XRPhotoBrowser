@@ -28,8 +28,6 @@
 #import "XRPhotoBrowserMarcos.h"
 #import "UIImage+XRPhotoBrowser.h"
 
-#import <SDWebImage/SDWebImage.h>
-
 @interface XRBrowserImageCell ()<UIScrollViewDelegate, XRBrowserImageViewDelegate, UIGestureRecognizerDelegate>
 {
     BOOL _isPanHandled;
