@@ -26,7 +26,6 @@
 #import "UIImage+XRPhotoBrowser.h"
 
 #import <SDWebImage/SDWebImageManager.h>
-#import <SDWebImage/SDWebImageDownloaderOperation.h>
 #import <Photos/Photos.h>
 
 #define XR_SDWebImageDownloadImageOptions (SDWebImageLowPriority | SDWebImageRetryFailed | SDWebImageAllowInvalidSSLCertificates)
@@ -40,7 +39,7 @@
 @property (nonatomic, strong, nullable) PHAsset * asset;
 
 // SDImageOperation
-@property (nonatomic, strong, nullable) SDWebImageCombinedOperation * webImageOperation;
+@property (nonatomic, strong, nullable) id<SDWebImageOperation> webImageOperation;
 
 @property (nonatomic, strong) PHImageManager * imageManager;
 @property (nonatomic, strong) NSOperationQueue * requestQueue;
@@ -191,7 +190,7 @@
     
     __weak typeof(self) weakSelf = self;
     
-    self.webImageOperation = [[SDWebImageManager sharedManager] loadImageWithURL:url options:XR_SDWebImageDownloadImageOptions  progress:^(NSInteger receivedSize, NSInteger expectedSize, NSURL * _Nullable targetURL) {
+    self.webImageOperation = [[SDWebImageManager sharedManager] loadImageWithURL:url options:XR_SDWebImageDownloadImageOptions progress:^(NSInteger receivedSize, NSInteger expectedSize, NSURL * _Nullable targetURL) {
         // progress notify
         if ([targetURL.absoluteString isEqualToString:weakSelf.urlString] || [targetURL.absoluteString isEqualToString:weakSelf.url.absoluteString]) {
             double progress = (double)receivedSize / (double)expectedSize;
@@ -206,7 +205,6 @@
             
             XRBrowserLog(@"url->%@\nprogress-> %lf", targetURL.absoluteString, progress);
         }
-        
     } completed:^(UIImage * _Nullable image, NSData * _Nullable data, NSError * _Nullable error, SDImageCacheType cacheType, BOOL finished, NSURL * _Nullable imageURL) {
         if (image) {
             if ([imageURL.absoluteString isEqualToString:weakSelf.urlString] || [imageURL.absoluteString isEqualToString:weakSelf.url.absoluteString]) {

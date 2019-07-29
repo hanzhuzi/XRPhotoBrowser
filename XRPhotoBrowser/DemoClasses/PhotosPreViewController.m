@@ -13,7 +13,7 @@
 #import "XRPhotoBrowser.h"
 
 #import <UIKit/UIKit.h>
-#import <SDWebImage/SDWebImage.h>
+#import <SDWebImage/UIImageView+WebCache.h>
 
 @interface PhotosPreViewController ()<UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout>
 

@@ -6,7 +6,7 @@ target 'XRPhotoBrowser' do
   use_frameworks!
 
   # Pods for XRPhotoBrowser
-  pod 'SDWebImage'
+  pod 'SDWebImage', '~> 4.0.0'
   pod 'MBProgressHUD'
   
   target 'XRPhotoBrowserTests' do

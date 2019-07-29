@@ -12,7 +12,8 @@
 #import "PhotosPreViewController.h"
 #import "XRPhotoPickerViewController.h"
 
-#import <SDWebImage/SDWebImage.h>
+#import <SDWebImage/SDWebImageManager.h>
+#import <SDWebImage/SDImageCache.h>
 
 @interface ViewController ()<UITableViewDelegate, UITableViewDataSource>
 
