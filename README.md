@@ -1,7 +1,7 @@
 # XRPhotoBrowser
 功能强大，内存占用低，高效流畅且支持图片转场效果的照片浏览框架。Powerful, low memory usage, efficient and smooth photo browsing framework that supports image transit effect.
 
-## How to Use `XRPhotoBrowser`(如何安装？)
+## How to Use `XRPhotoBrowser`(如何安使用？)
 
 ### From CocoaPods
 
@@ -19,6 +19,7 @@ Download `XRPhotoBrowser` add the files in the `Sources` directory to your proje
 * Objective-C
 * iOS 9.0
 * Xcode 10 or Latter
+* Dependent on framework `SDWebImage` 4.0.0 or later
 * Adaptation iPhoneX, iPhone XS, iPhone XS Max, iPhone XR
 iPhone，iPad，Screen anyway.
 
