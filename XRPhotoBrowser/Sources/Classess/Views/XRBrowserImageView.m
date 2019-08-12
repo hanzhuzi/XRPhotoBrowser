@@ -50,40 +50,7 @@
 
 - (void)setup {
     
-    self.userInteractionEnabled = YES;
-}
-
-// 系统手势识别单，双击使用requireGestureRecognizerToFail:，单击调用会有延迟，这里虽然也会延迟，不过小一些。
-- (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
-    
-    UITouch * touch = [touches anyObject];
-    
-    if (touch.tapCount == 1) {
-        [self performSelector:@selector(singleTapAction) withObject:nil afterDelay:0.29];
-    }
-    else if (touch.tapCount == 2) {
-        [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(singleTapAction) object:nil];
-        
-        [self doubleTapAction:touch];
-    }
-    
-    [super touchesBegan:touches withEvent:event];
-}
-
-#pragma mark - Action
-
-- (void)singleTapAction {
-    
-    if (self.delegate && [self.delegate respondsToSelector:@selector(imageViewSingleTapAction)]) {
-        [self.delegate imageViewSingleTapAction];
-    }
-}
-
-- (void)doubleTapAction:(UITouch *)touch {
-    
-    if (self.delegate && [self.delegate respondsToSelector:@selector(imageViewDoubleTapAction:)]) {
-        [self.delegate imageViewDoubleTapAction:touch];
-    }
+    self.userInteractionEnabled = NO;
 }
 
 @end

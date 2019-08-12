@@ -25,16 +25,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@protocol XRBrowserImageViewDelegate <NSObject>
-
-- (void)imageViewSingleTapAction;
-- (void)imageViewDoubleTapAction:(UITouch *)touch;
-
-@end
-
 @interface XRBrowserImageView : UIImageView
-
-@property (nonatomic, weak, nullable) id<XRBrowserImageViewDelegate> delegate;
 
 @end
 

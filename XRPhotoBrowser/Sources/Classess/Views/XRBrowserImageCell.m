@@ -28,7 +28,7 @@
 #import "XRPhotoBrowserMarcos.h"
 #import "UIImage+XRPhotoBrowser.h"
 
-@interface XRBrowserImageCell ()<UIScrollViewDelegate, XRBrowserImageViewDelegate, UIGestureRecognizerDelegate>
+@interface XRBrowserImageCell ()<UIScrollViewDelegate, UIGestureRecognizerDelegate>
 {
     BOOL _isPanHandled;
 }
@@ -81,7 +81,7 @@
     self.imageView = [[XRBrowserImageView alloc] init];
     self.imageView.frame = self.bounds;
     self.imageView.contentMode = UIViewContentModeScaleAspectFit;
-    self.imageView.delegate = self;
+    self.imageView.userInteractionEnabled = NO;
     [self.mainScrollView addSubview:self.imageView];
     self.imageView.hidden = YES;
     
@@ -103,6 +103,57 @@
     UIPanGestureRecognizer * panGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(handlePanGestureAction:)];
     panGesture.delegate = self;
     [self.contentView addGestureRecognizer:panGesture];
+    
+    UITapGestureRecognizer * singleTapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(singleTapAction)];
+    singleTapGesture.numberOfTapsRequired = 1;
+    [self.contentView addGestureRecognizer:singleTapGesture];
+    
+    UITapGestureRecognizer * doubleTapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(doubleTapAction:)];
+    doubleTapGesture.numberOfTapsRequired = 2;
+    [self.contentView addGestureRecognizer:doubleTapGesture];
+    
+    [singleTapGesture requireGestureRecognizerToFail:doubleTapGesture];
+}
+
+// TODO: - 不调用，后面解决.
+//// 系统手势识别单，双击使用requireGestureRecognizerToFail:，单击调用会有延迟，这里虽然也会延迟，不过小一些。
+//- (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
+//
+//    UITouch * touch = [touches anyObject];
+//
+//    if (touch.tapCount == 1) {
+//        [self performSelector:@selector(singleTapAction) withObject:nil afterDelay:0.29];
+//    }
+//    else if (touch.tapCount == 2) {
+//        [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(singleTapAction) object:nil];
+//
+//        [self doubleTapAction:touch];
+//    }
+//
+//    [super touchesBegan:touches withEvent:event];
+//}
+
+#pragma mark - Actions
+
+// 单击dismiss
+- (void)singleTapAction {
+    
+    BOOL isScaling = self.mainScrollView.zoomScale - 0.001 > self.mainScrollView.minimumZoomScale;
+    if (self.singleTapBlock) {
+        self.singleTapBlock(isScaling);
+    }
+}
+
+// 双击，放大\还原
+- (void)doubleTapAction:(UITouch *)touch {
+    
+    if (self.mainScrollView.zoomScale - 0.001 > self.mainScrollView.minimumZoomScale) {
+        [self setImageToInitalizationScaleAnimated];
+    }
+    else {
+        CGPoint touchPoint = [touch locationInView:self.imageView];
+        [self setImageToMaxScaleAnimated:touchPoint];
+    }
 }
 
 #pragma mark - Methods
@@ -468,29 +519,6 @@
         return NO;
     }
     return YES;
-}
-
-#pragma mark - XRBrowserImageViewDelegate
-
-// 单击显示，隐藏toolBars
-- (void)imageViewSingleTapAction {
-    
-    BOOL isScaling = self.mainScrollView.zoomScale - 0.001 > self.mainScrollView.minimumZoomScale;
-    if (self.singleTapBlock) {
-        self.singleTapBlock(isScaling);
-    }
-}
-
-// 双击，放大\还原
-- (void)imageViewDoubleTapAction:(UITouch *)touch {
-    
-    if (self.mainScrollView.zoomScale - 0.001 > self.mainScrollView.minimumZoomScale) {
-        [self setImageToInitalizationScaleAnimated];
-    }
-    else {
-        CGPoint touchPoint = [touch locationInView:self.imageView];
-        [self setImageToMaxScaleAnimated:touchPoint];
-    }
 }
 
 @end
