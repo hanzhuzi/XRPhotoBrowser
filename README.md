@@ -23,6 +23,9 @@ Download `XRPhotoBrowser` add the files in the `Sources` directory to your proje
 * Adaptation iPhoneX, iPhone XS, iPhone XS Max, iPhone XR
 iPhone，iPad，Screen anyway.
 
+### Reveal
+![图片预览](https://github.com/hanzhuzi/XRPhotoBrowser/blob/master/photo02.gif)
+
 ### LICENSE
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
